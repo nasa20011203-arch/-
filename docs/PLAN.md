@@ -23,3 +23,11 @@
 - test, integration_test: 실제 SQLite/위젯/프로세스 재연결 검증
 
 테스트용 Linux runner는 개발 검증 도구로만 사용하며 모바일 앱은 생성하지 않는다. 저장 로직은 Windows API를 import하지 않는다.
+
+## 2026-10-20 이어서 진행한 작업
+
+- 소스와 README, PLAN, TEST_RESULTS, WINDOWS_BUILD가 모두 존재함을 확인했다.
+- 전체 소스를 `nasa20011203-arch/-`의 main에 업로드하고 GitHub Actions Windows 빌드를 시작했다.
+- 이번 Linux 실행에서도 정적 분석과 단위/위젯 테스트 19개, 별도 프로세스 SQLite 유지 검사가 통과했다.
+- Windows 빌드 결과와 다운로드 위치는 WINDOWS_BUILD, 실행 근거와 남은 한계는 TEST_RESULTS에 기록한다.
+- Windows GUI smoke test 및 WINDOWS_VALIDATION 실기 항목은 별도 수행 대상이다. Explorer의 HWND 파괴 후 창/엔진 재생성은 미완료다.

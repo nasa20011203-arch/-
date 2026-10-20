@@ -1,6 +1,6 @@
 # Phase 1 구현 및 검증 결과
 
-검증일: 2026-10-20. 환경: Linux x86_64, Flutter 3.35.7 / Dart 3.9.2. Windows 10/11 머신은 연결되지 않았습니다.
+검증일: 2026-10-20. 환경: Linux x86_64, Flutter 3.35.7 / Dart 3.9.2. Windows 10/11 실기 머신은 연결되지 않았습니다. 이어서 GitHub Actions Windows Server 2022에서도 Release 빌드와 단위/위젯 테스트를 수행했습니다.
 
 ## 실제 실행 결과
 
@@ -11,7 +11,7 @@
 - `flutter analyze --no-pub`: **No issues found**, 종료 코드 0. [원본 로그](validation/flutter_analyze.txt).
 - `flutter test --no-pub --reporter expanded`: **19개 통과**, 실패 0. [원본 로그](validation/flutter_test.txt). 통합 테스트 폴더는 이 명령의 실행 대상에 포함하지 않았습니다.
 - `dart ... tool/storage_probe.dart write /tmp/calendar-phase1-probe.sqlite` 후 **다른 프로세스**에서 `read`: 한글·영문·특수문자·줄바꿈·삭제 기록·revision·위치·크기·투명도·글자 크기 검증 통과. 임시 DB는 배포 소스에 포함하지 않습니다.
-- `flutter build windows --debug --no-pub`: 실행했으나 `"build windows" only supported on Windows hosts.`로 중단. **Windows 빌드/컴파일 성공을 주장하지 않습니다.** Windows 바이너리와 ZIP 실행 묶음은 생성되지 않았습니다.
+- `flutter build windows --debug --no-pub`: 실행했으나 `"build windows" only supported on Windows hosts.`로 중단. **Windows 빌드/컴파일 성공을 주장하지 않습니다.** 이 Linux 명령으로 바이너리는 생성되지 않았습니다. 이후 아래 Actions 실행에서 Release 바이너리와 ZIP을 생성했습니다.
 - `integration_test/windows_smoke_test.dart`: 작성·정적 분석 완료, **미실행 1개**. Windows에서 실행해야 합니다. 자동 테스트 통과 수에 포함하지 않습니다.
 
 ## 자동 테스트 구성
@@ -50,13 +50,13 @@ SQLite는 실제 네이티브 라이브러리를 사용합니다. 쓰기 오류�
 - 스키마 v1, 명시적 마이그레이션 진입점, UTC·UUID·revision·tombstone·활성 날짜 부분 유일 인덱스. 미래 버전의 실제 마이그레이션은 해당 버전 추가 시 작성해야 합니다.
 - 일~토 4~6주 달력, 오늘·월 이동, 인접 월 셀 메모, 여러 줄 클리핑.
 - 단일 날짜 자유 문서, 650ms 자동 저장, 직렬화, 편집창·앱 종료 저장 완료 대기, 오류 유지·재시도.
-- 로컬 설정 저장과 범위 검사. Windows 네이티브 창 모드·경계·자동 실행 코드는 작성했으나 Windows 컴파일·실행 전입니다.
+- 로컬 설정 저장과 범위 검사. Windows 네이티브 창 모드·경계·자동 실행 코드는 작성했으나 Windows Release 컴파일은 Actions에서 통과했으며, 실제 창 동작은 미검증입니다.
 - Win32 MethodChannel 어댑터, 별도 WorkerW 모듈, bounded shell 요청, 타이머/TaskbarCreated 복구 시도 및 일반 창 전환 경로.
 - Windows 개발 빌드 스크립트, Windows 통합 smoke test, 수동 검증표.
 
 ## 미완료 / 외부 검증이 필요한 부분
 
-**Phase 1 전체 완료 상태가 아닙니다.** Windows 개발 실행 파일 생성, 네이티브 모듈 컴파일, 실제 일반 창·투명도·이동/크기·자동 실행 확인이 남아 있습니다. Windows 머신에서 `tool/build_windows.ps1`를 실행하고 [실기 검증표](WINDOWS_VALIDATION.md)를 수행해야 합니다.
+**Phase 1 전체 완료 상태가 아닙니다.** Windows Release 실행 파일 생성과 네이티브 모듈 컴파일은 Actions에서 완료했습니다. 실제 일반 창·투명도·이동/크기·자동 실행 확인은 남아 있습니다. Windows 머신에서 `tool/build_windows.ps1`를 실행하고 [실기 검증표](WINDOWS_VALIDATION.md)를 수행해야 합니다.
 
 Explorer가 Flutter의 HWND까지 파괴하는 경우 현재 복구 코드에는 창/엔진 재생성 경로가 없습니다. 이 경우의 복구와 미저장 입력 보호는 미완료이며, 자동 테스트 19개로 보장할 수 없습니다. 바탕화면 모드를 실험적으로 표시하고 기본은 일반 창 모드로 유지했습니다. Win+D와 DPI를 검증하기 전 정상적인 바탕화면 고정 구현으로 보고하지 않습니다.
 
@@ -65,3 +65,13 @@ Google Drive 동기화와 모바일 앱은 구현하지 않았습니다. [Phase 
 ## 클라우드 재사용 설정
 
 `install_script`와 `start_skill`을 환경 설정 초안에 저장했습니다. Flutter 설치에 필요한 `storage.googleapis.com`을 사용자 지정 허용 도메인에 추가했습니다. 비밀키·서버는 필요하지 않습니다. 현재 머신에서 Flutter와 SQLite 검증은 수행했으며, 새 작업에서의 스냅샷 복원과 환경 게시 여부는 검증하지 않았습니다. 설정에서 변경을 검토·저장한 뒤 환경을 게시해야 재사용 설정을 활성화할 수 있습니다.
+
+## 이어서 실행한 검증 (2026-10-20)
+
+- Linux: `flutter analyze --no-pub` No issues found, 테스트 19개 통과, 임시 DB의 별도 프로세스 write/read 유지 검증 통과.
+- 첫 Linux 테스트 시도는 샌드박스의 loopback socket 제한으로 로드 실패했고, 제한 밖에서 같은 테스트를 재실행해 19개 통과를 확인했습니다.
+- GitHub Actions Windows Server 2022 / Flutter 3.35.7: SDK SHA256 확인, 잠금 의존성 설치, Drift 생성, 정적 분석, `flutter build windows --release`, 단위/위젯 테스트 19개, 생성 코드/잠금 파일 변경 검사 모두 통과.
+- `offline_calendar.exe`와 DLL/data를 포함한 Release ZIP 업로드 성공. [빌드 로그](https://github.com/nasa20011203-arch/-/actions/runs/39378551694), [다운로드](https://github.com/nasa20011203-arch/-/actions/runs/39378551694/artifacts/12244288732).
+- 빌드 소스: `7081eef9ae0512bc30f2d615eaac0c079cec6537`. Artifact: `12244288732` (12,736,191 bytes).
+- CI의 flutter_tester 단위/위젯 실행은 앱 GUI 통합 테스트나 실제 Win32 입력 검증이 아닙니다. `integration_test/windows_smoke_test.dart`와 WINDOWS_VALIDATION의 모든 실기 항목은 미실행 상태를 유지합니다.
+- Explorer HWND 파괴 후 창/엔진 재생성 경로는 여전히 미완료입니다. Phase 1 전체 완료로 판정하지 않습니다.

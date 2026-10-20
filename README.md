@@ -2,7 +2,7 @@
 
 Flutter / Dart, Riverpod, Drift / SQLite, C++ / Win32로 구현하는 Windows 10·11용 개발 버전입니다. 앱에서 서버나 인터넷을 사용하지 않습니다. 일반 창 모드가 기본값이며, Explorer 바탕화면 연결은 실험적입니다.
 
-**현재 Windows 실행 파일과 Windows 실기 검증은 제공되지 않았습니다.** 이 저장소에는 전체 소스와 Windows 빌드 스크립트가 있습니다. 검증 범위와 한계는 [테스트 결과](docs/TEST_RESULTS.md)에 기록합니다.
+**Windows x64 Release 실행 파일이 GitHub Actions에서 생성되었습니다. Windows GUI 실기 검증은 미실행입니다.** [실행 묶음 다운로드](https://github.com/nasa20011203-arch/-/actions/runs/39378551694/artifacts/12244288732) · [성공한 빌드](https://github.com/nasa20011203-arch/-/actions/runs/39378551694). 이 저장소에는 전체 소스와 Windows 빌드 스크립트가 있습니다. 검증 범위와 한계는 [테스트 결과](docs/TEST_RESULTS.md)에 기록합니다.
 
 ## 실행 / 빌드
 
@@ -29,11 +29,11 @@ flutter run -d windows
 .\tool\build_windows.ps1
 ```
 
-로컬 스크립트 실행이 제한된 환경에서는 스크립트의 명령을 직접 실행할 수 있습니다. 스크립트는 코드 생성·정적 분석·Windows Debug 빌드·테스트를 수행하며 실패하면 중단합니다. 결과는 `build/windows/x64/runner/Debug/offline_calendar.exe`, 전체 묶음은 `dist/offline_calendar-windows-debug.zip`입니다. **이 경로는 생성 예정 경로이며, 현재 Windows 빌드 성공을 뜻하지 않습니다.** exe만 옮기지 말고 DLL·data를 포함한 전체 폴더를 사용하세요. Debug 배포는 개발 도구/런타임이 있는 개발 PC용입니다.
+로컬 스크립트 실행이 제한된 환경에서는 스크립트의 명령을 직접 실행할 수 있습니다. 스크립트는 코드 생성·정적 분석·Windows Debug 빌드·테스트를 수행하며 실패하면 중단합니다. 결과는 `build/windows/x64/runner/Debug/offline_calendar.exe`, 전체 묶음은 `dist/offline_calendar-windows-debug.zip`입니다. Debug 경로는 로컬 생성 예정 경로입니다. Actions에서는 Release 빌드를 생성했습니다. exe만 옮기지 말고 DLL·data를 포함한 전체 폴더를 사용하세요. Debug 배포는 개발 도구/런타임이 있는 개발 PC용입니다.
 
 Windows에서 SQLite 테스트를 단독 실행할 때에는 먼저 Windows runner를 빌드하고 `sqlite3.dll`이 들어 있는 Debug 폴더를 해당 PowerShell 세션 PATH에 추가하세요. 빌드 스크립트가 이 작업을 처리합니다.
 
-GitHub Actions Windows 빌드와 Release 실행 파일 생성 절차는 [Windows 빌드](docs/WINDOWS_BUILD.md)를 참고하세요. 워크플로는 아직 실행하지 않았습니다.
+GitHub Actions Windows 빌드와 Release 실행 파일 생성 절차는 [Windows 빌드](docs/WINDOWS_BUILD.md)를 참고하세요. 2026-10-20 Actions #1에서 Release 빌드와 Windows 단위/위젯 테스트 19개가 통과했습니다.
 
 ## 사용
 
