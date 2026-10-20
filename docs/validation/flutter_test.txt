@@ -1,0 +1,21 @@
+00:00 +0: loading /workspace/-/test/settings_test.dart
+00:00 +0: /workspace/-/test/settings_test.dart: invalid settings are bounded and offscreen positions remain representable
+00:00 +1: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:02 +2: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:04 +3: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:04 +4: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:04 +5: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:05 +6: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:05 +7: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:05 +8: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:05 +9: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:05 +10: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:06 +11: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:06 +12: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:06 +13: /workspace/-/test/calendar_widget_test.dart: double click edits correct date, auto saves, navigates and deletes
+00:06 +14: /workspace/-/test/calendar_widget_test.dart: failed close protects draft until SQLite writes recover
+00:06 +15: /workspace/-/test/calendar_widget_test.dart: six week month fits minimum window with maximum font
+00:07 +16: /workspace/-/test/calendar_widget_test.dart: six week month fits minimum window with maximum font
+00:07 +17: /workspace/-/test/calendar_widget_test.dart: six week month fits minimum window with maximum font
+00:07 +18: /workspace/-/test/calendar_widget_test.dart: native close request waits for save and protects failed draft
+00:08 +19: All tests passed!

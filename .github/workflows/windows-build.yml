@@ -1,0 +1,49 @@
+name: Windows executable
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install verified Flutter 3.35.7 SDK
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $archive = Join-Path $env:RUNNER_TEMP 'flutter-windows.zip'
+          $sdk = Join-Path $env:RUNNER_TEMP 'flutter-sdk'
+          Invoke-WebRequest -Uri 'https://storage.googleapis.com/flutter_infra_release/releases/stable/windows/flutter_windows_3.35.7-stable.zip' -OutFile $archive
+          $expected = 'b804653bfd2ad27f8d376c62a608ea2c7cbd49ff2b85010af6f8a53aa352fd62'
+          if ((Get-FileHash $archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected) {
+            throw 'Flutter SDK checksum mismatch'
+          }
+          Expand-Archive -Path $archive -DestinationPath $sdk
+          Add-Content -Path $env:GITHUB_PATH -Value (Join-Path $sdk 'flutter/bin')
+
+      - name: Build and test Windows application
+        shell: pwsh
+        run: |
+          flutter config --enable-windows-desktop
+          if ($LASTEXITCODE -ne 0) { throw 'Flutter configuration failed' }
+          ./tool/build_windows.ps1 -Configuration Release
+          if ($LASTEXITCODE -ne 0) { throw 'Windows build or tests failed' }
+          git diff --exit-code -- pubspec.lock lib/database/app_database.g.dart
+          if ($LASTEXITCODE -ne 0) { throw 'Generated code or lockfile changed unexpectedly' }
+
+      - name: Upload executable bundle
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: offline-calendar-windows-x64
+          path: dist/offline_calendar-windows-release.zip
+          if-no-files-found: error
+          retention-days: 14
